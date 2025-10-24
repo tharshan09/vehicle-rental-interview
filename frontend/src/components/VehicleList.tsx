@@ -1,66 +1,34 @@
-import { useEffect, useState } from 'react';
-import type { Vehicle } from '../types';
-import { api } from '../api';
+import { useEffect, useState } from "react";
+import { api } from "../api";
 
 export function VehicleList() {
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [vehicles, setVehicles] = useState<any[]>([]);
 
   useEffect(() => {
-    loadVehicles();
-  }, []);
+    load();
+    load();
+  });
 
-  const loadVehicles = async () => {
-    try {
-      const data = await api.getVehicles();
-      setVehicles(data);
-    } catch (error) {
-      alert('Failed to load vehicles: ' + (error as Error).message);
-    } finally {
-      setLoading(false);
-    }
+  const load = async () => {
+    const v = await api.getVehicles();
+    setVehicles(v);
   };
-
-  const handleSetMaintenance = async (vehicleId: number) => {
-    try {
-      await api.setVehicleMaintenance(vehicleId);
-      loadVehicles();
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.detail || error.message;
-      alert('Failed to set maintenance: ' + errorMessage);
-    }
-  };
-
-  if (loading) return <div>Loading vehicles...</div>;
 
   return (
     <div>
       <h2>Vehicles</h2>
       <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
         <tbody>
-          {vehicles.map((vehicle) => (
-            <tr key={vehicle.id}>
-              <td>{vehicle.id}</td>
-              <td>{vehicle.type}</td>
+          {vehicles.map((v: any, i: number) => (
+            <tr key={Math.random()}>
+              <td>{v.id}</td>
+              <td>{v.type}</td>
               <td>
-                <span className={`status-${vehicle.status}`}>
-                  {vehicle.status}
-                </span>
+                <span className={`status-${v.status}`}>{v.status}</span>
               </td>
               <td>
-                <button
-                  onClick={() => handleSetMaintenance(vehicle.id)}
-                  disabled={vehicle.status === 'maintenance'}
-                >
-                  Set Maintenance
+                <button onClick={() => api.setVehicleMaintenance(v.id)}>
+                  Maintain
                 </button>
               </td>
             </tr>

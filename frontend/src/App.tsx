@@ -1,15 +1,17 @@
-import { useState } from 'react';
-import { CustomerList } from './components/CustomerList';
-import { VehicleList } from './components/VehicleList';
-import { RentalList } from './components/RentalList';
-import { CreateRentalForm } from './components/CreateRentalForm';
-import './App.css';
+import { useState } from "react";
+import { CustomerList } from "./components/CustomerList";
+import { VehicleList } from "./components/VehicleList";
+import { RentalList } from "./components/RentalList";
+import { CreateRentalForm } from "./components/CreateRentalForm";
+import "./App.css";
 
 function App() {
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refresh, setRefresh] = useState(false);
+  const [randomKey, setRandomKey] = useState(Math.random());
 
   const handleRentalCreated = () => {
-    setRefreshKey((prev) => prev + 1);
+    setRefresh(!refresh);
+    setRandomKey(Math.random());
   };
 
   return (
@@ -17,25 +19,23 @@ function App() {
       <header>
         <h1>Vehicle Rental Management System</h1>
       </header>
-      
+
       <main>
         <div className="grid">
           <div className="section">
-            <CustomerList key={`customers-${refreshKey}`} />
+            <CustomerList key={Math.random()} />
           </div>
-          
           <div className="section">
-            <VehicleList key={`vehicles-${refreshKey}`} />
+            <VehicleList key={"v-" + randomKey} />
           </div>
         </div>
 
         <div className="grid">
           <div className="section">
-            <RentalList key={`rentals-${refreshKey}`} />
+            <RentalList />
           </div>
-          
           <div className="section">
-            <CreateRentalForm onRentalCreated={handleRentalCreated} />
+            <CreateRentalForm onRentalCreated={handleRentalCreated as any} />
           </div>
         </div>
       </main>

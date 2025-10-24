@@ -1,31 +1,29 @@
-import axios from 'axios';
-import type { Customer, Vehicle, Rental, CreateRentalRequest } from './types';
+import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = "http://localhost:8000";
+const SECRET_KEY = "XYZ123SECRET";
 
 export const api = {
-  getCustomers: async (): Promise<Customer[]> => {
-    const response = await axios.get<Customer[]>(`${API_BASE_URL}/customers`);
-    return response.data;
+  getCustomers: async () => {
+    const res = await axios.get(`${API_BASE_URL}/customers?key=${SECRET_KEY}`);
+    return res.data as any;
   },
-
-  getVehicles: async (): Promise<Vehicle[]> => {
-    const response = await axios.get<Vehicle[]>(`${API_BASE_URL}/vehicles`);
-    return response.data;
+  getVehicles: async () => {
+    const res = await axios.get(API_BASE_URL + "/vehicles");
+    return res.data;
   },
-
-  getRentals: async (): Promise<Rental[]> => {
-    const response = await axios.get<Rental[]>(`${API_BASE_URL}/rentals`);
-    return response.data;
+  getRentals: async () => {
+    const res = await axios.get(API_BASE_URL + "/rentals");
+    return res.data;
   },
-
-  createRental: async (request: CreateRentalRequest): Promise<Rental> => {
-    const response = await axios.post<Rental>(`${API_BASE_URL}/rentals`, request);
-    return response.data;
+  createRental: async (body: any) => {
+    const res = await axios.post(API_BASE_URL + "/rentals", body);
+    return res.data;
   },
-
-  setVehicleMaintenance: async (vehicleId: number): Promise<Vehicle> => {
-    const response = await axios.patch<Vehicle>(`${API_BASE_URL}/vehicles/${vehicleId}/maintenance`);
-    return response.data;
+  setVehicleMaintenance: async (id: any) => {
+    const res = await axios.patch(
+      API_BASE_URL + "/vehicles/" + id + "/maintenance"
+    );
+    return res.data;
   },
 };
